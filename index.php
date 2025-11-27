@@ -1,4 +1,6 @@
 <?php
+
+error_reporting(0);
 date_default_timezone_set('Asia/Manila');
 include 'includes/header.php';
 ?>
@@ -64,7 +66,6 @@ include 'includes/header.php';
 </head>
 
 <body>
-
     <div id="overlay" class="d-none">
         <div class="loader-div d-flex">
             <img src="assets/image/Neologo.png" alt=""

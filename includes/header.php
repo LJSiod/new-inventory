@@ -1,5 +1,12 @@
 <?php
-error_reporting(0);
+session_start();
+if (!isset($_SESSION['userid']) || empty($_SESSION['userid'])) {
+  header("Location: login.php");
+  exit;
+}
+$userid = $_SESSION['userid'];
+$firstname = $_SESSION['firstname'];
+$fullname = $_SESSION['fullname'];
 ?>
 
 <head>
@@ -44,52 +51,71 @@ error_reporting(0);
 
   <div class="offcanvas offcanvas-end" style="width: 300px;" id="sidebar">
     <div class="offcanvas-header">
-      <h4 class="offcanvas-title">Menu</h4>
+      <h4 class="offcanvas-title">Hi, <?= $firstname ?>!</h4>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
     </div>
-    <hr>
+
     <div class="offcanvas-body">
-      <div class="fw-bold">Equipment Summary</div>
-      <ul class="list-group">
-        <a href="#" class="list-group-item d-flex justify-content-between">
-          <div class="small">Total
-            equipment</div>
-          <span id="total" class="badge bg-secondary rounded-pill"></span>
-        </a>
-        <a href="#" class="list-group-item d-flex justify-content-between">
-          <div class="small">In
-            Stock</div><span id="instock" class="badge bg-success rounded-pill"></span>
-        </a>
-        <a href="#" class="list-group-item d-flex justify-content-between">
-          <div class="small">Deployed</div><span id="deployed" class="badge bg-primary rounded-pill"></span>
-        </a>
-        <a href="#" class="list-group-item d-flex justify-content-between">
-          <div class="small">Damaged</div><span id="damaged" class="badge bg-danger rounded-pill"></span>
-        </a>
-      </ul>
-      <hr>
-      <div class="fw-bold">Actions</div>
-      <div class="d-flex justify-content-between">
-        <div class="btn-group mt-3" role="group" aria-label="Basic example">
-          <button type="button" data-type="add" class="btn btn-outline-secondary fw-bold showunitmodal">
-            <i class="fa fa-plus me-2" aria-hidden="true"></i>
-            Add Unit
-          </button>
-          <button type="button" data-type="stock" class="btn btn-outline-secondary fw-bold showequipmentmodal">
-            <i class="fa fa-laptop me-2" aria-hidden="true"></i>
-            Add Equipment
-          </button>
+      <hr class="my-3">
+
+      <div class="d-flex flex-column">
+        <div class="mb-3">
+          <div class="fw-bold">Equipment Summary</div>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="small">Total equipment</div>
+              <span id="total" class="badge bg-secondary rounded-pill"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="small">In Stock</div>
+              <span id="instock" class="badge bg-success rounded-pill"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="small">Deployed</div>
+              <span id="deployed" class="badge bg-primary rounded-pill"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="small">Damaged</div>
+              <span id="damaged" class="badge bg-danger rounded-pill"></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="mb-3">
+          <div class="fw-bold">Actions</div>
+          <div class="list-group">
+            <a href="#" class="d-flex justify-content-between list-group-item list-group-item-action small"
+              data-type="add" data-bs-toggle="modal" data-bs-target="#unitmodal">
+              Add Unit
+              <i class="fa fa-plus me-2" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="d-flex justify-content-between list-group-item list-group-item-action small"
+              data-type="stock" data-bs-toggle="modal" data-bs-target="#equipmentmodal">
+              Add Equipment
+              <i class="fa fa-laptop me-2" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="fw-bold">Settings</div>
+          <div class="list-group">
+            <a href="#" class="list-group-item d-flex justify-content-between" aria-current="true">
+              <div class="small">Toggle Dark mode</div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
+              </div>
+            </a>
+            <button type="button"
+              class="list-group-item d-flex justify-content-between list-group-item-action fw-bold logoutbtn">
+              <div class="small text-danger">Logout</div>
+              <i class="fa fa-sign-out me-2 text-danger" aria-hidden="true"></i>
+            </button>
+          </div>
         </div>
       </div>
-      <hr>
-      <div class="fw-bold">Settings</div>
-      <div class="d-flex justify-content-center">
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
-          <label class="form-check-label" style="font-size: 0.7rem;" for="darkModeSwitch"><u><b>Toggle Dark
-                mode</b></u></label>
-        </div>
-      </div>
+
+      <hr class="my-3">
     </div>
   </div>
 
@@ -141,7 +167,7 @@ error_reporting(0);
         }
       });
 
-      $('#logoutBtn').click(function () {
+      $('.logoutbtn').click(function () {
         Swal.fire({
           icon: 'success',
           title: 'Logging Out',
